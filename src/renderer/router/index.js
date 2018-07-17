@@ -11,6 +11,21 @@ export default new Router({
       // component: require('@/components/DrawingBoard').default
     },
     {
+      path: '/create-project',
+      name: 'create-project',
+      component: require('@/components/CreateProject').default
+    },
+    // {
+    //   path: '/project/:id/home',
+    //   name: 'project-view',
+    //   component: require('@/components/ProjectView').default
+    // },
+    // {
+    //   path: '/project/:id/board',
+    //   name: 'board-view',
+    //   component: require('@/components/BoardView').default
+    // },
+    {
       path: '*',
       redirect: '/'
     }

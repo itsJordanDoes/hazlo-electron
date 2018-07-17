@@ -1,20 +1,26 @@
 <template>
   <div id="app">
     <top-bar></top-bar>
-    <side-bar></side-bar>
-    <div id="router-view">
-      <router-view></router-view>
+    <div class="view-container">
+        <project-view></project-view>
+        <notes-view></notes-view>
+        <view-view></view-view>
     </div>
+    <!-- <div class="router-view">
+      <router-view></router-view>
+    </div> -->
   </div>
 </template>
 
 <script>
   import TopBar from './components/TopBar'
-  import SideBar from './components/SideBar'
+  import ProjectView from './components/ProjectView'
+  import NotesView from './components/NotesView'
+  import ViewView from './components/ViewView'
   import { mapGetters } from 'vuex'
   export default {
     name: 'Hazlo',
-    components: { TopBar, SideBar },
+    components: { TopBar, ProjectView, NotesView, ViewView },
     computed: mapGetters({
       cards: 'cards'
     }),
@@ -45,7 +51,15 @@
   /* CSS */
   #app {
     width:100%;
-    height:100%;
+    height:calc(100% - #{$top-bar-height});
+    .view-container {
+      width:100%;
+      height:100%;
+      background-color:blue;
+      display:flex;
+      flex-direction: row;
+      flex-wrap: none;
+    }
     .router-view {
       margin-left: $side-bar-width;
       margin-top: $top-bar-height;
