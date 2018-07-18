@@ -41,20 +41,16 @@
 .closed {
   width:0%;
   min-width:0% !important;
-  .project, .new-project {
-    visibility: hidden;
-    opacity:0;
-  }
+  visibility: hidden;
+  opacity:0;
 }
 .open {
   width:$side-bar-width;
-  .project, .new-project {
-    visibility: visible;
-    opacity:1;
-  }
+  visibility: visible;
+  opacity:1;
 }
 .project-view{
-  transition: min-width 0.4s ease,width 0.4s ease;
+  transition: min-width $delay ease 0s,width $delay ease 0s, opacity $delay ease $delay,visibility 0s ease 0s;
   min-width:$side-bar-width;
   height:100%;
   background-color:#f8f8f8;
@@ -67,7 +63,6 @@
       white-space: nowrap;
       padding: 0.75em;
       cursor: pointer;
-      transition: opacity 0.2s ease, visibility 0.2s ease;
       font-size:14px;
     }
     .project:hover {
@@ -84,7 +79,7 @@
     padding: 0.75em;
     cursor:pointer;
     background-color:rgba(0,0,0,0.05);
-    transition: opacity 0.2s ease, visibility 0.2s ease;
+    // transition: opacity 0.2s ease, visibility 0.2s ease;
   }
   .new-project:hover {
     background-color:rgba(0,0,0,0.1);

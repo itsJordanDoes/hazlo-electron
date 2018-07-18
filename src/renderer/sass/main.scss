@@ -8,3 +8,19 @@ html, body {
     padding:0px;
     margin:0px;
 }
+code, .ql-syntax {
+    border-radius:3px;
+    background-color:#f8f8f8;
+    border:1px solid #dddddd;
+    padding:4px;
+}
+
+.ql-editor {
+    height:100%;
+    width:auto;
+    outline:none;
+    padding:20px;
+    p {
+        margin:0;
+    }
+}

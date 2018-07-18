@@ -35,12 +35,16 @@
 .closed {
   width:0%;
   min-width:0% !important;
+  visibility: hidden;
+  opacity:0;
 }
 .open {
   width:100%;
+  visibility: visible;
+  opacity:1;
 }
 .view-view{
-  transition: min-width 0.4s ease,width 0.4s ease;
+  transition: min-width $delay ease 0s,width $delay ease 0s, opacity $delay ease $delay,visibility 0s ease 0s;
   min-width:50%;
   height:100%;
   background-color:white;

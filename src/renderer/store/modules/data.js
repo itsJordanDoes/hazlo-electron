@@ -7,7 +7,8 @@ const localStore = new Store({
       name: '',
       project_view: true,
       notes_view: true,
-      view_view: true
+      view_view: true,
+      active_project: 0
     }
   },
   name: 'Data'
@@ -39,6 +40,10 @@ const mutations = {
   SET_VIEW (state, obj) {
     state.settings[obj.type] = obj.boolean
     localStore.set('settings', state.settings)
+  },
+  SAVE_NOTES (state, obj) {
+    state.projects[obj.id].notes = obj.data
+    localStore.set('projects', state.projects)
   }
 }
 
@@ -55,14 +60,17 @@ const actions = {
   deleteProject ({ commit }, id) {
     commit('DELETE_PROJECT', id)
   },
-  exec ({ commit }, command) {
-    document.execCommand(command)
+  exec ({ commit }, data) {
+    document.execCommand(data.command, data.boolean, data.value)
   },
   toggleView ({ commit }, obj) {
     commit('TOGGLE_VIEW', obj)
   },
   setView ({ commit }, obj) {
     commit('SET_VIEW', obj)
+  },
+  saveNotes ({ commit }, obj) {
+    commit('SAVE_NOTES', obj)
   }
 }
 

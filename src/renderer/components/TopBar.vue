@@ -14,6 +14,20 @@
       <div :class="['top-bar-btn icon',$store.state.data.settings.view_view?'active':'']" @click="viewToggle('view_view')">
         <font-awesome-icon :icon="['far', 'list-alt']" />
       </div>
+      <button @click="styleCommand('title')">Log</button>
+    </div>
+    <div class="top-bar-btn-container tool-tip-parent" v-click-outside="hideStyles" v-show="$store.state.data.settings.notes_view && $route.name === 'workspace'">
+      <div class="top-bar-btn" @click="stylesView = !stylesView">
+        <font-awesome-icon :icon="['fas', 'font']" />
+      </div>
+      <div id="tool-bar" class="tool-tip" v-show="stylesView">
+        <button class="tool-tip-btn ql-header" @click="stylesView = false"><h2>Title</h2></button>
+        <button class="tool-tip-btn ql-bold" @click="stylesView = false"><strong>Heading</strong></button>
+        <button class="tool-tip-btn ql-italic" @click="stylesView = false"><em>Detail</em></button>
+        <button class="tool-tip-btn ql-list" @click="stylesView = false"><ul><li>Bulleted List</li></ul></button>
+        <button class="tool-tip-btn" @click="stylesView = false"><ol><li>Checklist</li></ol></button>
+        <button class="tool-tip-btn ql-code-block" @click="stylesView = false"><code>Snippet</code></button>
+      </div>
     </div>
     <div class="top-bar-btn-container right">
       <div class="top-bar-btn" v-show="$route.name !== 'settings'" @click="route('/settings')">Settings</div>
@@ -69,16 +83,8 @@
           boolean: boolean
         })
       },
-      workspaceRoute () {
-        this.$router.push({path: `/workspace`})
-      },
-      ideaBoardView () {
-        var i = this.$route.params.id
-        this.$router.push({path: `/project/${i}/home`, params: { i }})
-      },
-      boardView () {
-        var i = this.$route.params.id
-        this.$router.push({path: `/project/${i}/board`, params: { i }})
+      hideStyles () {
+        this.stylesView = false
       }
     },
     computed: {
@@ -90,7 +96,8 @@
       return {
         delay: 200,
         clicks: 0,
-        timer: null
+        timer: null,
+        stylesView: false
       }
     },
     watch: {
@@ -153,6 +160,42 @@ $btn-color: rgb(255, 255, 255);
     // svg {
     //   color:darken($btn-color, 30%);
     // }
+  }
+  .tool-tip-parent {
+    display:relative;
+    .tool-tip {
+      position: absolute;
+      z-index:4;
+      background-color:white;
+      width:auto;
+      height:auto;
+      top:36px;
+      display:flex;
+      flex-direction: column;
+      box-shadow: 0px 2px 10px rgba(0,0,0,0.3);
+      border-radius:3px;
+      margin-left:-40px;
+      padding:10px;
+      .tool-tip-btn {
+        font-size:14px;
+        cursor:pointer;
+        margin:0;
+        padding:5px;
+        background:none;
+        border:none;
+        h3, h2 {
+          margin:0;
+        }
+        ul {
+          margin:0;
+          padding-left: 19px;
+        }
+        ol {
+          margin:0;
+          padding-left: 19px;
+        }
+      }
+    }
   }
   .icon {
     width:25px;
