@@ -18,11 +18,11 @@
     methods: {
       update (event) {
         // console.log(event)
-        var nodes = document.getElementById('text-editor').childNodes
+        // var nodes = document.getElementById('text-editor').childNodes
         // console.log(nodes)
-        nodes.forEach(function (node) {
-          console.log(node.tagName)
-        })
+        // nodes.forEach(function (node) {
+        //   node.tagName
+        // })
       },
       log () {
         // var nodes = document.getElementById('text-editor').childNodes

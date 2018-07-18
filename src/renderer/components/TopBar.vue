@@ -1,14 +1,23 @@
 <template>
   <div class="top-bar">
-    <div :class="['top-bar-btn',$store.state.data.settings.project_view?'active':'']" @click="viewToggle('project_view')">Projects</div>
-    <div :class="['top-bar-btn',$store.state.data.settings.notes_view?'active':'']" @click="viewToggle('notes_view')">Notes</div>
-    <div :class="['top-bar-btn',$store.state.data.settings.view_view?'active':'']" @click="viewToggle('view_view')">Views</div>
-    <!-- <button @click="ideaBoardView()">Idea Board</button>
-    <button @click="boardView()">Board</button>
-    <button @click="$store.dispatch('exec', 'bold')">Bold</button>
-    <button @click="$store.dispatch('exec', 'italic')">Italic</button>
-    <button @click="$store.dispatch('exec', 'insertOrderedList')">Ordered List</button>
-    <button @click="$store.dispatch('exec', 'insertUnorderedList')">Unordered List</button> -->
+    <div class="top-bar-btn-container">
+      <div class="top-bar-btn" v-show="$route.name !== 'feed'" @click="route('/')">Project Feed</div>
+      <div class="top-bar-btn" v-show="$route.name !== 'workspace'" @click="route('/workspace')">Workspace</div>
+    </div>
+    <div class="top-bar-btn-container" v-show="$route.name === 'workspace'">
+      <div :class="['top-bar-btn icon',$store.state.data.settings.project_view?'active':'']" @click="viewToggle('project_view')">
+        <font-awesome-icon :icon="['far', 'folder-open']" />
+      </div>
+      <div :class="['top-bar-btn icon',$store.state.data.settings.notes_view?'active':'']" @click="viewToggle('notes_view')">
+        <font-awesome-icon :icon="['far', 'edit']" />
+      </div>
+      <div :class="['top-bar-btn icon',$store.state.data.settings.view_view?'active':'']" @click="viewToggle('view_view')">
+        <font-awesome-icon :icon="['far', 'list-alt']" />
+      </div>
+    </div>
+    <div class="top-bar-btn-container right">
+      <div class="top-bar-btn" v-show="$route.name !== 'settings'" @click="route('/settings')">Settings</div>
+    </div>
   </div>
 </template>
 
@@ -19,6 +28,9 @@
     name: 'top-bar',
     components: { },
     methods: {
+      route (route) {
+        this.$router.push({path: route})
+      },
       viewToggle (event) {
         this.clicks++
         if (this.clicks === 1) {
@@ -57,6 +69,9 @@
           boolean: boolean
         })
       },
+      workspaceRoute () {
+        this.$router.push({path: `/workspace`})
+      },
       ideaBoardView () {
         var i = this.$route.params.id
         this.$router.push({path: `/project/${i}/home`, params: { i }})
@@ -70,7 +85,6 @@
 
     },
     mounted () {
-
     },
     data () {
       return {
@@ -85,18 +99,12 @@
       },
       '$store.state.data.settings.notes_view': function () {
         if (!this.$store.state.data.settings.notes_view && !this.$store.state.data.settings.view_view) {
-          this.$store.dispatch('setView', {
-            type: 'view_view',
-            boolean: true
-          })
+          this.dispatchView('view_view', true)
         }
       },
       '$store.state.data.settings.view_view': function () {
         if (!this.$store.state.data.settings.notes_view && !this.$store.state.data.settings.view_view) {
-          this.$store.dispatch('setView', {
-            type: 'notes_view',
-            boolean: true
-          })
+          this.dispatchView('notes_view', true)
         }
       }
     }
@@ -105,34 +113,62 @@
 
 <style lang="scss" scoped>
 @import "../sass/settings.scss";
+$top-bar-color: rgb(238, 238, 238);
+$btn-color: rgb(255, 255, 255);
 .top-bar {
   width:calc(100% - 80px);
   height:$top-bar-height;
-  background-color:rgb(148, 148, 148);
+  background: linear-gradient($top-bar-color, darken($top-bar-color, 12%));
   -webkit-user-select: none;
   -webkit-app-region: drag;
-  // position:absolute;
-  // top:0;
-  // left:0;
   padding-left:80px;
   display:flex;
   flex-direction: row;
-  // justify-content: left;
   align-items: center;
+  .top-bar-btn-container {
+    height:100%;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left:10px;
+    padding-right:10px;
+    border-left:1px solid darken($top-bar-color, 15%);
+    border-right:1px solid darken($top-bar-color, 15%);
+    .top-bar-btn {
+      margin-right:5px;
+      margin-left:5px;
+    }
+  }
   .top-bar-btn {
-    background-color:#f8f8f8;
+    color:darken($btn-color, 40%);
+    background-color:$btn-color;
     height:$top-bar-height/1.5;
     padding:0 0.5em 0 0.5em;
     display:flex;
     justify-content: center;
     align-items: center;
     cursor:pointer;
+    border-radius:3px;
+    box-shadow:1px 1px 3px rgba(darken($btn-color, 50%), 0.2);
+    // svg {
+    //   color:darken($btn-color, 30%);
+    // }
+  }
+  .icon {
+    width:25px;
   }
   .top-bar-btn:hover {
-    background-color:#e0e0e0;
+    background-color:darken($btn-color, 5%);
+  }
+  .top-bar-btn:active {
+    box-shadow: inset 2px 2px 5px rgba(darken($btn-color, 50%), 0.2);
   }
   .active {
-    background-color:#c9c9c9
+    box-shadow: inset 2px 2px 5px rgba(darken($btn-color, 50%), 0.6);
+    background-color:darken($btn-color, 10%);
+  }
+  .right {
+    margin-left: auto;
   }
 }
 </style>

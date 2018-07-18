@@ -1,14 +1,7 @@
 <template>
   <div id="app">
     <top-bar></top-bar>
-    <div class="view-container">
-        <project-view></project-view>
-        <notes-view></notes-view>
-        <view-view></view-view>
-    </div>
-    <!-- <div class="router-view">
-      <router-view></router-view>
-    </div> -->
+    <router-view class="router-view"></router-view>
   </div>
 </template>
 
@@ -52,17 +45,12 @@
   #app {
     width:100%;
     height:calc(100% - #{$top-bar-height});
-    .view-container {
+    .router-view {
       width:100%;
       height:100%;
-      background-color:blue;
       display:flex;
       flex-direction: row;
       flex-wrap: none;
-    }
-    .router-view {
-      margin-left: $side-bar-width;
-      margin-top: $top-bar-height;
     }
   }
 </style>

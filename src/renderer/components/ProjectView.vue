@@ -58,6 +58,8 @@
   min-width:$side-bar-width;
   height:100%;
   background-color:#f8f8f8;
+  border-right:1px solid #cacaca;
+  z-index:3;
   .project-container {
     display:flex;
     flex-direction: column;
@@ -66,6 +68,7 @@
       padding: 0.75em;
       cursor: pointer;
       transition: opacity 0.2s ease, visibility 0.2s ease;
+      font-size:14px;
     }
     .project:hover {
       background-color:rgba(0,0,0,0.05);

@@ -1,6 +1,6 @@
 <template>
   <div :class="['view-view',$store.state.data.settings.view_view?'open':'closed']">
-
+    VIEW VIEW
   </div>
 </template>
 
@@ -43,7 +43,7 @@
   transition: min-width 0.4s ease,width 0.4s ease;
   min-width:50%;
   height:100%;
-  background-color:green;
+  background-color:white;
   .project-container {
     display:flex;
     flex-direction: column;

@@ -1,6 +1,6 @@
 <template>
   <div :class="['notes-view',$store.state.data.settings.notes_view?'open':'closed']">
-
+    NOTES VIEW
   </div>
 </template>
 
@@ -43,7 +43,9 @@
   transition: min-width 0.4s ease,width 0.4s ease;
   min-width:33%;
   height:100%;
-  background-color:red;
+  background-color:white;
+  border-right:1px solid #cacaca;
+  z-index:2;
   .project-container {
     display:flex;
     flex-direction: column;
