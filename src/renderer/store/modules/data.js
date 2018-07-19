@@ -30,7 +30,7 @@ const mutations = {
     localStore.set('projects', state.projects)
   },
   DELETE_PROJECT (state, id) {
-    state.projects.splice(id)
+    state.projects.splice(id, 1)
     localStore.set('projects', state.projects)
   },
   TOGGLE_VIEW (state, obj) {
@@ -44,6 +44,10 @@ const mutations = {
   SAVE_NOTES (state, obj) {
     state.projects[obj.id].notes = obj.data
     localStore.set('projects', state.projects)
+  },
+  SELECT_PROJECT (state, id) {
+    state.settings.active_project = id
+    localStore.set('settings', state.settings)
   }
 }
 
@@ -71,6 +75,9 @@ const actions = {
   },
   saveNotes ({ commit }, obj) {
     commit('SAVE_NOTES', obj)
+  },
+  selectProject ({ commit }, id) {
+    commit('SELECT_PROJECT', id)
   }
 }
 

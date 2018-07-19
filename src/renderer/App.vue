@@ -17,23 +17,19 @@
     computed: mapGetters({
       cards: 'cards'
     }),
-    methods: {
-      addCard () {
-        this.$store.dispatch('addCard', {
-          label: this.label,
-          content: this.content
-        })
-      },
-      deleteCard (i) {
-        this.$store.dispatch('deleteCard', i)
-      }
-    },
-    mounted () {
-    },
+    methods: { },
+    mounted () { },
     data () {
       return {
         label: '',
         content: ''
+      }
+    },
+    watch: {
+      '$store.state.data.projects.length': function () {
+        if (this.$store.state.data.projects.length === 0) {
+          this.$router.push({path: '/'})
+        }
       }
     }
   }

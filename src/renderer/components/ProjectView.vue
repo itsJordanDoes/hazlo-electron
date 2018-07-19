@@ -1,7 +1,10 @@
 <template>
   <div :class="['project-view',$store.state.data.settings.project_view?'open':'closed']">
     <div class="project-container">
-      <div class="project" v-for="project, i in projects" @click="viewProject(i)">{{ project.label }}</div>
+      <div :class="['project',$store.state.data.settings.active_project === i?'active':'']" v-for="project, i in projects" @click="viewProject(i)">
+        {{ project.label }} 
+        <font-awesome-icon @click="deleteProject(i)" class="trash" :icon="['far', 'trash-alt']" />
+      </div>
     </div>
     <hr>
     <div class="new-project" @click="addProject()">
@@ -20,8 +23,17 @@
         this.$router.push({path: '/create-project'})
       },
       viewProject (i) {
-        console.log(i)
-        // this.$router.push({path: `/project/${i}/home`, params: { i }})
+        if (this.handler !== true) {
+          this.$store.dispatch('selectProject', i)
+        } else {
+          this.handler = false
+        }
+      },
+      deleteProject (i) {
+        this.handler = true
+        this.$store.dispatch('deleteProject', i)
+        this.$store.dispatch('selectProject', 0)
+        this.$router.push({path: '/workspace'})
       }
     },
     computed: mapGetters({
@@ -31,6 +43,7 @@
     },
     data () {
       return {
+        handler: false
       }
     }
   }
@@ -64,8 +77,19 @@
       padding: 0.75em;
       cursor: pointer;
       font-size:14px;
+      .trash {
+        float:right;
+        color:rgb(179, 179, 179);
+        cursor:pointer;
+      }
+      .trash:hover {
+        color:rgb(146, 146, 146);
+      }
     }
     .project:hover {
+      background-color:rgba(0,0,0,0.05);
+    }
+    .active {
       background-color:rgba(0,0,0,0.05);
     }
   }

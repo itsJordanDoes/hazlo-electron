@@ -2,7 +2,7 @@
   <div class="top-bar">
     <div class="top-bar-btn-container">
       <div class="top-bar-btn" v-show="$route.name !== 'feed'" @click="route('/')">Project Feed</div>
-      <div class="top-bar-btn" v-show="$route.name !== 'workspace'" @click="route('/workspace')">Workspace</div>
+      <div class="top-bar-btn" v-show="$route.name !== 'workspace' && $store.state.data.projects.length > 0" @click="route('/workspace')">Workspace</div>
     </div>
     <div class="top-bar-btn-container" v-show="$route.name === 'workspace'">
       <div :class="['top-bar-btn icon',$store.state.data.settings.project_view?'active':'']" @click="viewToggle('project_view')">

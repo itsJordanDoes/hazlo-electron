@@ -11,10 +11,10 @@ import vClickOutside from 'v-click-outside'
 // Font Awesome Stuff
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCog, faFont } from '@fortawesome/free-solid-svg-icons'
-import { faFolder, faFolderOpen, faEdit, faListAlt } from '@fortawesome/free-regular-svg-icons'
+import { faFolder, faFolderOpen, faEdit, faListAlt, faTrashAlt } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faFolder, faFolderOpen, faEdit, faListAlt, faCog, faFont)
+library.add(faFolder, faFolderOpen, faEdit, faListAlt, faCog, faFont, faTrashAlt)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 // End Font Awesome Stuff

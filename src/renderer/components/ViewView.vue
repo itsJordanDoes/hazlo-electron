@@ -1,6 +1,6 @@
 <template>
-  <div :class="['view-view',$store.state.data.settings.view_view?'open':'closed']">
-    VIEW VIEW
+  <div id="view-view" :ondragenter="color('enter')" :ondragleave="color('leave')" :class="['view-view',$store.state.data.settings.view_view?'open':'closed']">
+    
   </div>
 </template>
 
@@ -10,19 +10,12 @@
     name: 'view-view',
     components: { },
     methods: {
-      addProject () {
-        this.$router.push({path: '/create-project'})
-      },
-      viewProject (i) {
-        console.log(i)
-        // this.$router.push({path: `/project/${i}/home`, params: { i }})
+      color (color) {
+        console.log(color)
       }
     },
-    computed: mapGetters({
-      projects: 'projects'
-    }),
-    mounted () {
-    },
+    computed: mapGetters({ }),
+    mounted () { },
     data () {
       return {
       }

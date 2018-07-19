@@ -1,9 +1,7 @@
 <template>
   <div :class="['notes-view',$store.state.data.settings.notes_view?'open':'closed']">
-    <button @click="log()">Log</button>
-    <div id="editor">
-
-    </div>
+    <div v-show="createCard">CAN MAKE A CARD</div>
+    <div id="editor"/>
   </div>
 </template>
 
@@ -15,45 +13,56 @@
     components: { },
     methods: {
       log () {
-        var element = document.getElementById('editor').childNodes
-        console.log(element[0].childNodes)
+        var selection = this.textEditor.getSelection()
+        console.log(this.textEditor.getContents(selection.index, selection.length))
+      },
+      buildTextEditor () {
+        var that = this
+        var i = this.$store.state.data.settings.active_project
+        var container = document.getElementById('editor')
+        var toolBar = document.getElementById('tool-bar')
+        var options = {
+          // debug: 'info',
+          modules: {
+            toolbar: toolBar
+          }
+        }
+        this.textEditor = new Quill(container, options)
+        this.textEditor.setContents(this.$store.state.data.projects[i].notes)
+        this.textEditor.on('text-change', function (delta, oldDelta, source) {
+          if (source === 'api') {
+            // console.log('An API call triggered this change.')
+          } else if (source === 'user') {
+            // console.log('A user action triggered this change.')
+            that.$store.dispatch('saveNotes', {
+              id: that.$store.state.data.settings.active_project,
+              data: that.textEditor.getContents()
+            })
+          }
+        })
       }
     },
     computed: mapGetters({ }),
     mounted () {
       var that = this
-      var i = this.$store.state.data.settings.active_project
-      var container = document.getElementById('editor')
-      var toolBar = document.getElementById('tool-bar')
-      var options = {
-        // debug: 'info',
-        modules: {
-          toolbar: toolBar
-        }
-      }
-      var editor = new Quill(container, options)
-      editor.setContents(this.$store.state.data.projects[i].notes)
-      editor.on('text-change', function (delta, oldDelta, source) {
-        if (source === 'api') {
-          // console.log('An API call triggered this change.')
-        } else if (source === 'user') {
-          // console.log('A user action triggered this change.')
-          console.log({
-            id: that.$store.state.data.settings.active_project,
-            data: editor.getContents()
-          })
-          that.$store.dispatch('saveNotes', {
-            id: that.$store.state.data.settings.active_project,
-            data: editor.getContents()
-          })
+      this.buildTextEditor()
+      document.addEventListener('selectionchange', function () {
+        if (window.getSelection().toString() !== '') {
+          that.createCard = true
+        } else {
+          that.createCard = false
         }
       })
     },
     data () {
       return {
-        data: [
-
-        ]
+        textEditor: null,
+        createCard: false
+      }
+    },
+    watch: {
+      '$store.state.data.settings.active_project': function () {
+        this.buildTextEditor()
       }
     }
   }
