@@ -1,90 +1,125 @@
 <template>
-  <div :class="['notes-view',$store.state.data.settings.notes_view?'open':'closed']">
-    <div v-show="createCard">CAN MAKE A CARD</div>
-    <div id="editor"/>
+  <!-- <div :class="['notes-view',user.settings.view_state.notes_view?'open':'closed']"> -->
+  <div class="notes-view">
+    <div class="editor-container">
+      <editor v-if="live" id="editor" inline :init="init" api-key="ipdkwew8kl6935yqdqe0z5bbflvbxi0k9p79od81lfpwf1zy" v-model="notes"></editor>
+    </div>
   </div>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import Quill from 'quill'
+  import firebase from 'firebase'
+  import Editor from '@tinymce/tinymce-vue'
+  // import { mapGetters } from 'vuex'
   export default {
     name: 'notes-view',
-    components: { },
+    components: { Editor },
     methods: {
-      log () {
-        var selection = this.textEditor.getSelection()
-        console.log(this.textEditor.getContents(selection.index, selection.length))
+      resetNotes () {
+        this.live = false
+        this.intilize()
       },
-      buildTextEditor () {
+      intilize () {
         var that = this
-        var i = this.$store.state.data.settings.active_project
-        var container = document.getElementById('editor')
-        var toolBar = document.getElementById('tool-bar')
-        var options = {
-          // debug: 'info',
-          modules: {
-            toolbar: toolBar
-          }
-        }
-        this.textEditor = new Quill(container, options)
-        this.textEditor.setContents(this.$store.state.data.projects[i].notes)
-        this.textEditor.on('text-change', function (delta, oldDelta, source) {
-          if (source === 'api') {
-            // console.log('An API call triggered this change.')
-          } else if (source === 'user') {
-            // console.log('A user action triggered this change.')
-            that.$store.dispatch('saveNotes', {
-              id: that.$store.state.data.settings.active_project,
-              data: that.textEditor.getContents()
+        this.init = {
+          selector: '#editor',
+          branding: false,
+          menubar: false,
+          toolbar: false,
+          inline: true,
+          theme: 'inlite',
+          plugins: [
+            'lists'
+          ],
+          insert_toolbar: 'numlist bullist',
+          selection_toolbar: 'bold italic | h2 h3 | bullist | currentselection',
+          //   contextmenu: 'inserttable | cell row column deletetable',
+          setup: function (editor) {
+            that.editor = editor
+            function createCard () {
+              console.log(editor.selection.getContent())
+            }
+            editor.addButton('currentselection', {
+              text: 'Create Card',
+              tooltip: 'Convert To Card',
+              onclick: createCard
             })
           }
+        }
+        this.live = true
+        that.listenToNotes()
+      },
+      listenToNotes () {
+        var that = this
+        if (this.user.views.previous_project !== null) {
+          this.stopProjectNotes(this.user.views.previous_project)
+        }
+        firebase.database().ref('projects/' + this.user.views.active_project + '/project_notes').on('value', function (snapshot) {
+          // that.editor.setContent(snapshot.val())
+          that.notes = snapshot.val()
         })
+      },
+      stopProjectNotes (key) {
+        firebase.database().ref('projects/' + key + '/project_notes').off()
+      },
+      updateProjectNotes () {
+        var that = this
+        var key = this.user.views.active_project
+        clearTimeout(this.timeout)
+        this.timeout = setTimeout(function () {
+          firebase.database().ref('projects/' + key + '/project_notes').set(that.notes)
+        }, 500)
       }
     },
-    computed: mapGetters({ }),
+    computed: {
+      user () {
+        return this.$store.getters.user
+      }
+    },
     mounted () {
-      var that = this
-      this.buildTextEditor()
-      document.addEventListener('selectionchange', function () {
-        if (window.getSelection().toString() !== '') {
-          that.createCard = true
-        } else {
-          that.createCard = false
-        }
-      })
+      this.resetNotes()
+    },
+    beforeDestroy () {
+      this.live = false
+      this.stopProjectNotes(this.user.views.active_project)
+      this.stopProjectNotes(this.user.views.previous_project)
     },
     data () {
       return {
-        textEditor: null,
-        createCard: false
+        notes: '',
+        init: {},
+        live: false,
+        timeout: '',
+        editor: null
       }
     },
     watch: {
-      '$store.state.data.settings.active_project': function () {
-        this.buildTextEditor()
+      '$store.state.data.user.views.active_project': function () {
+        this.resetNotes()
+      },
+      'notes': function () {
+        this.updateProjectNotes()
       }
+      // '$store.state.data.project_notes': function () {
+      //   console.log('Notice Change?')
+      //   this.notes = this.state.projects_notes[this.user.views.active_project]
+      //   this.editor.setContent(this.notes)
+      // },
     }
   }
 </script>
 
 <style lang="scss" scoped>
 @import "../sass/settings.scss";
-
-.closed {
-  width:0%;
-  min-width:0% !important;
-  visibility: hidden;
-  opacity:0;
-}
-.open {
-  width:100%;
-  visibility: visible;
-  opacity:1; 
+.editor-container {
+  width:auto;
+  height:100%;
+  padding:20px;
 }
 .notes-view{
   transition: min-width $delay ease 0s,width $delay ease 0s, opacity $delay ease $delay,visibility 0s ease 0s;
   min-width:33%;
+  width:100%;
   height:100%;
   background-color:white;
   border-right:1px solid #cacaca;

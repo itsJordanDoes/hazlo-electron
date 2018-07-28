@@ -8,6 +8,10 @@ html, body {
     padding:0px;
     margin:0px;
 }
+
+// Input Fields
+
+// Quill CSS
 code, .ql-syntax {
     border-radius:3px;
     background-color:#f8f8f8;
@@ -23,4 +27,19 @@ code, .ql-syntax {
     p {
         margin:0;
     }
+}
+
+// TINY MCE CSS
+.mce-content-body {
+    height:100%;
+    width:100%;
+    p {
+        margin:0;
+    }
+}
+.mce-content-body:focus {
+    outline:none;
+}
+.poop {
+    background-color:red;
 }

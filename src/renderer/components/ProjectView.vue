@@ -1,14 +1,20 @@
 <template>
-  <div :class="['project-view',$store.state.data.settings.project_view?'open':'closed']">
+  <!-- <div :class="['project-view',user.settings.view_state.projects_view?'open':'closed']"> -->
+  <div class="project-view">
     <div class="project-container">
-      <div :class="['project',$store.state.data.settings.active_project === i?'active':'']" v-for="project, i in projects" @click="viewProject(i)">
-        {{ project.label }} 
-        <font-awesome-icon @click="deleteProject(i)" class="trash" :icon="['far', 'trash-alt']" />
+      <div class="projects-tab">
+        <span @click="ownedProjectsView = true" :class="ownedProjectsView?'active-tab':''">Owned</span>
+        <span @click="ownedProjectsView = false" :class="!ownedProjectsView?'active-tab':''">Shared</span>
+      </div>
+      <div v-if="ownedProjectsView" :class="['project',user.views.active_project === i?'active':'']" v-for="project, i in ownedProjectsMeta" @click="selectProject(i)">
+        <input class="project-name" :id="'project-name-' + i" :value="project.name" placeholder="Untitled Project" @keyup="updateName(i)"></input>
+        <!-- <font-awesome-icon @click="deleteProject(i)" class="trash" :icon="['far', 'trash-alt']" /> -->
+        <!-- {{ project.name }} -->
       </div>
     </div>
     <hr>
-    <div class="new-project" @click="addProject()">
-      Add New Project
+    <div class="new-project" @click="createProject()">
+      Create New Project
     </div>
   </div>
 </template>
@@ -19,31 +25,78 @@
     name: 'project-view',
     components: { },
     methods: {
-      addProject () {
-        this.$router.push({path: '/create-project'})
+      createProject () {
+        this.$store.dispatch('createProject').then(function (response) {
+          console.log(response)
+        }).catch(function (error) {
+          console.log(error)
+        })
       },
-      viewProject (i) {
-        if (this.handler !== true) {
-          this.$store.dispatch('selectProject', i)
-        } else {
-          this.handler = false
-        }
+      listenOwnedProjectsMeta () {
+        var that = this
+        this.$store.dispatch('listenOwnedProjectsMeta').then(function (response) {
+          that.ownedProjectsMeta = that.state.owned_projects_meta
+        }).catch(function (error) {
+          console.log(error)
+        })
       },
-      deleteProject (i) {
-        this.handler = true
-        this.$store.dispatch('deleteProject', i)
-        this.$store.dispatch('selectProject', 0)
-        this.$router.push({path: '/workspace'})
+      stopOwnedProjectsMeta () {
+        this.$store.dispatch('stopOwnedProjectsMeta').then(function (response) {
+          // console.log(response)
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
+      selectProject (i) {
+        var that = this
+        this.previousProjectId = this.user.views.active_project
+        this.$store.dispatch('selectProject', {
+          prev: that.previousProjectId,
+          new: i
+        }).then(function (response) {
+
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
+      updateName (i) {
+        var name = document.getElementById('project-name-' + i).value
+        var that = this
+        clearTimeout(this.timeout)
+        this.timeout = setTimeout(function () {
+          that.$store.dispatch('updateProjectName', {
+            name: name,
+            key: i
+          }).then(function (response) {
+
+          }).catch(function (error) {
+            console.log(error)
+          })
+        }, 500)
       }
     },
     computed: mapGetters({
-      projects: 'projects'
+      user: 'user',
+      state: 'state'
     }),
     mounted () {
+      this.listenOwnedProjectsMeta()
+    },
+    beforeDestroy () {
+      this.stopOwnedProjectsMeta()
     },
     data () {
       return {
-        handler: false
+        ownedProjectsView: true,
+        ownedProjectsMeta: null,
+        handler: false,
+        timeout: null,
+        previousProjectId: null
+      }
+    },
+    watch: {
+      '$store.state.data.owned_projects_meta': function () {
+        this.ownedProjectsMeta = this.state.owned_projects_meta
       }
     }
   }
@@ -72,6 +125,28 @@
   .project-container {
     display:flex;
     flex-direction: column;
+    .projects-tab {
+      height:35px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color:white;
+      cursor:pointer;
+      span:first-of-type {
+        border-right:1px solid #cacaca;
+      }
+      span {
+        height: 100%;
+        width: 50%;
+        border-bottom: 1px solid #cacaca;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .active-tab {
+        background-color:#cacaca;
+      }
+    }
     .project {
       white-space: nowrap;
       padding: 0.75em;
@@ -84,6 +159,14 @@
       }
       .trash:hover {
         color:rgb(146, 146, 146);
+      }
+      .project-name {
+        background: none;
+        border:none;
+        font-size:14px;
+      }
+      .project-name:focus {
+        outline:none;
       }
     }
     .project:hover {

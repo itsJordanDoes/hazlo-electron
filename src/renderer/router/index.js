@@ -21,11 +21,6 @@ export default new Router({
       component: require('@/components/AppSettings').default
     },
     {
-      path: '/create-project',
-      name: 'create-project',
-      component: require('@/components/CreateProject').default
-    },
-    {
       path: '*',
       redirect: '/'
     }

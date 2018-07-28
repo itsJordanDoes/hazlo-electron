@@ -5,8 +5,15 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+// Import Firebase Config
+import firebase from 'firebase'
+import firebaseConfig from './firebase_config'
+
 // v-click-outside directive
 import vClickOutside from 'v-click-outside'
+
+// Vue Multiselect
+import Multiselect from 'vue-multiselect'
 
 // Font Awesome Stuff
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -18,6 +25,9 @@ library.add(faFolder, faFolderOpen, faEdit, faListAlt, faCog, faFont, faTrashAlt
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 // End Font Awesome Stuff
+
+// Vue Multiselect
+Vue.component('multiselect', Multiselect)
 
 // Recognize Clicks outside of components
 Vue.use(vClickOutside)
@@ -31,5 +41,8 @@ new Vue({
   components: { App },
   router,
   store,
-  template: '<App/>'
+  template: '<App/>',
+  created () {
+    firebase.initializeApp(firebaseConfig)
+  }
 }).$mount('#app')

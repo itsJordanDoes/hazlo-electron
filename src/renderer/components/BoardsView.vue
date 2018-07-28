@@ -1,20 +1,23 @@
 <template>
-  <div id="view-view" :ondragenter="color('enter')" :ondragleave="color('leave')" :class="['view-view',$store.state.data.settings.view_view?'open':'closed']">
-    
+  <!-- <div id="view-view" :ondragenter="color('enter')" :ondragleave="color('leave')" :class="['view-view',user.settings.view_state.boards_view?'open':'closed']"> -->
+  <div class="boards-view">
+    BOARDS VIEW
   </div>
 </template>
 
 <script>
   import { mapGetters } from 'vuex'
   export default {
-    name: 'view-view',
+    name: 'boards-view',
     components: { },
     methods: {
       color (color) {
-        console.log(color)
+
       }
     },
-    computed: mapGetters({ }),
+    computed: mapGetters({
+      user: 'user'
+    }),
     mounted () { },
     data () {
       return {
@@ -25,20 +28,10 @@
 
 <style lang="scss" scoped>
 @import "../sass/settings.scss";
-.closed {
-  width:0%;
-  min-width:0% !important;
-  visibility: hidden;
-  opacity:0;
-}
-.open {
-  width:100%;
-  visibility: visible;
-  opacity:1;
-}
 .view-view{
   transition: min-width $delay ease 0s,width $delay ease 0s, opacity $delay ease $delay,visibility 0s ease 0s;
   min-width:50%;
+  width:100%;
   height:100%;
   background-color:white;
   .project-container {

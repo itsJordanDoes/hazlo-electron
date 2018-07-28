@@ -2,21 +2,21 @@
   <div class="top-bar">
     <div class="top-bar-btn-container">
       <div class="top-bar-btn" v-show="$route.name !== 'feed'" @click="route('/')">Project Feed</div>
-      <div class="top-bar-btn" v-show="$route.name !== 'workspace' && $store.state.data.projects.length > 0" @click="route('/workspace')">Workspace</div>
+      <div class="top-bar-btn" v-show="$route.name !== 'workspace'" @click="route('/workspace')">Workspace</div>
     </div>
     <div class="top-bar-btn-container" v-show="$route.name === 'workspace'">
-      <div :class="['top-bar-btn icon',$store.state.data.settings.project_view?'active':'']" @click="viewToggle('project_view')">
+      <div :class="['top-bar-btn icon',user.views.projects_view?'active':'']" @click="viewToggle('projects_view')">
         <font-awesome-icon :icon="['far', 'folder-open']" />
       </div>
-      <div :class="['top-bar-btn icon',$store.state.data.settings.notes_view?'active':'']" @click="viewToggle('notes_view')">
+      <div :class="['top-bar-btn icon',user.views.notes_view?'active':'']" @click="viewToggle('notes_view')">
         <font-awesome-icon :icon="['far', 'edit']" />
       </div>
-      <div :class="['top-bar-btn icon',$store.state.data.settings.view_view?'active':'']" @click="viewToggle('view_view')">
+      <div :class="['top-bar-btn icon',user.views.boards_view?'active':'']" @click="viewToggle('boards_view')">
         <font-awesome-icon :icon="['far', 'list-alt']" />
       </div>
-      <button @click="styleCommand('title')">Log</button>
     </div>
-    <div class="top-bar-btn-container tool-tip-parent" v-click-outside="hideStyles" v-show="$store.state.data.settings.notes_view && $route.name === 'workspace'">
+    <button @click="$store.dispatch('logoutUser')">Logout</button>
+    <!-- <div class="top-bar-btn-container tool-tip-parent" v-click-outside="hideStyles" v-show="user.settings.view_state.notes_view && $route.name === 'workspace'">
       <div class="top-bar-btn" @click="stylesView = !stylesView">
         <font-awesome-icon :icon="['fas', 'font']" />
       </div>
@@ -30,12 +30,15 @@
       </div>
     </div>
     <div class="top-bar-btn-container right">
+      <button class="top-bar-btn" @click="$router.push({path:'/register'})">Register</button>
+      <button class="top-bar-btn" @click="$router.push({path:'/login'})">Login</button>
       <div class="top-bar-btn" v-show="$route.name !== 'settings'" @click="route('/settings')">Settings</div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   let { remote } = require('electron')
   let win = remote.getCurrentWindow()
   export default {
@@ -60,20 +63,20 @@
         }
       },
       windowSelect (type) {
-        if (type === 'project_view') {
-          this.dispatchView('project_view', true)
+        if (type === 'projects_view') {
+          this.dispatchView('projects_view', true)
           this.dispatchView('notes_view', false)
-          this.dispatchView('view_view', true)
+          this.dispatchView('boards_view', true)
           win.setSize(1024, 768, true)
         } else if (type === 'notes_view') {
-          this.dispatchView('project_view', false)
+          this.dispatchView('projects_view', false)
           this.dispatchView('notes_view', true)
-          this.dispatchView('view_view', false)
+          this.dispatchView('boards_view', false)
           win.setSize(450, 600, true)
-        } else if (type === 'view_view') {
-          this.dispatchView('project_view', false)
+        } else if (type === 'boards_view') {
+          this.dispatchView('projects_view', false)
           this.dispatchView('notes_view', false)
-          this.dispatchView('view_view', true)
+          this.dispatchView('boards_view', true)
           win.setSize(1024, 768, true)
         }
       },
@@ -87,9 +90,9 @@
         this.stylesView = false
       }
     },
-    computed: {
-
-    },
+    computed: mapGetters({
+      user: 'user'
+    }),
     mounted () {
     },
     data () {
@@ -101,16 +104,16 @@
       }
     },
     watch: {
-      '$store.state.data.settings.project_view': function () {
+      '$store.state.data.settings.projects_view': function () {
 
       },
       '$store.state.data.settings.notes_view': function () {
-        if (!this.$store.state.data.settings.notes_view && !this.$store.state.data.settings.view_view) {
-          this.dispatchView('view_view', true)
+        if (!this.$store.state.data.settings.notes_view && !this.$store.state.data.settings.boards_view) {
+          this.dispatchView('boards_view', true)
         }
       },
-      '$store.state.data.settings.view_view': function () {
-        if (!this.$store.state.data.settings.notes_view && !this.$store.state.data.settings.view_view) {
+      '$store.state.data.settings.boards_view': function () {
+        if (!this.$store.state.data.settings.notes_view && !this.$store.state.data.settings.boards_view) {
           this.dispatchView('notes_view', true)
         }
       }

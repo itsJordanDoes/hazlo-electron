@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, Menu } from 'electron'
+import { app, BrowserWindow } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -32,32 +32,32 @@ function createWindow () {
     mainWindow = null
   })
 
-  const template = [
-    {
-      label: 'Hazlo',
-      submenu: [
-        {
-          label: 'About'
-        },
-        {
-          label: 'Settings'
-        },
-        {
-          label: 'Quit'
-        }
-      ]
-    },
-    {
-      label: 'Edit',
-      submenu: [
-        {
-          label: 'more stuff'
-        }
-      ]
-    }
-  ]
-  const menu = Menu.buildFromTemplate(template)
-  Menu.setApplicationMenu(menu)
+  // const template = [
+  //   {
+  //     label: 'Hazlo',
+  //     submenu: [
+  //       {
+  //         label: 'About'
+  //       },
+  //       {
+  //         label: 'Settings'
+  //       },
+  //       {
+  //         label: 'Quit'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     label: 'Edit',
+  //     submenu: [
+  //       {
+  //         label: 'more stuff'
+  //       }
+  //     ]
+  //   }
+  // ]
+  // const menu = Menu.buildFromTemplate(template)
+  // Menu.setApplicationMenu(menu)
 }
 
 app.on('ready', createWindow)
