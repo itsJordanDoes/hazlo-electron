@@ -1,6 +1,6 @@
 <template>
   <!-- <div :class="['notes-view',user.settings.view_state.notes_view?'open':'closed']"> -->
-  <div class="notes-view">
+  <div class="notes-view" id="notes-view">
     <div class="editor-container">
       <editor v-if="live" id="editor" inline :init="init" api-key="ipdkwew8kl6935yqdqe0z5bbflvbxi0k9p79od81lfpwf1zy" v-model="notes"></editor>
     </div>
@@ -10,6 +10,8 @@
 <script>
   import firebase from 'firebase'
   import Editor from '@tinymce/tinymce-vue'
+  import interact from 'interactjs'
+  // var jsdiff = require('diff')
   // import { mapGetters } from 'vuex'
   export default {
     name: 'notes-view',
@@ -56,6 +58,10 @@
         }
         firebase.database().ref('projects/' + this.user.views.active_project + '/project_notes').on('value', function (snapshot) {
           // that.editor.setContent(snapshot.val())
+          // var diff = jsdiff.diffChars(that.notes, snapshot.val())
+          // diff.forEach(function (part) {
+          //   console.log(part)
+          // })
           that.notes = snapshot.val()
         })
       },
@@ -69,6 +75,23 @@
         this.timeout = setTimeout(function () {
           firebase.database().ref('projects/' + key + '/project_notes').set(that.notes)
         }, 500)
+      },
+      resizableNotes () {
+        interact('.notes-view').resizable({
+          edges: { left: true, right: true, bottom: false, top: false },
+          restrictEdges: {
+            outer: 'parent',
+            endOnly: true
+          },
+          restrictSize: {
+            min: { width: 300 }
+          },
+          inertia: false,
+          onmove: function (event) {
+          }
+        }).on('resizemove', function (event) {
+          event.target.style.width = event.rect.width + 'px'
+        })
       }
     },
     computed: {
@@ -78,6 +101,12 @@
     },
     mounted () {
       this.resetNotes()
+      if (this.user.views.boards_view) {
+        this.resizableNotes()
+      } else {
+        document.getElementById('notes-view').style.width = '100%'
+        interact('.notes-view').unset()
+      }
     },
     beforeDestroy () {
       this.live = false
@@ -99,6 +128,14 @@
       },
       'notes': function () {
         this.updateProjectNotes()
+      },
+      'user.views.boards_view': function () {
+        if (this.user.views.boards_view) {
+          this.resizableNotes()
+        } else {
+          document.getElementById('notes-view').style.width = '100%'
+          interact('.notes-view').unset()
+        }
       }
       // '$store.state.data.project_notes': function () {
       //   console.log('Notice Change?')
@@ -118,7 +155,7 @@
 }
 .notes-view{
   transition: min-width $delay ease 0s,width $delay ease 0s, opacity $delay ease $delay,visibility 0s ease 0s;
-  min-width:33%;
+  // min-width:33%;
   width:100%;
   height:100%;
   background-color:white;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="workspace">
     <project-view v-if="user.views.projects_view"></project-view>
     <notes-view v-if="user.views.notes_view"></notes-view>
     <boards-view v-if="user.views.boards_view"></boards-view>
