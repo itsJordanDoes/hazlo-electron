@@ -17,11 +17,12 @@ import Multiselect from 'vue-multiselect'
 
 // Font Awesome Stuff
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCog, faFont } from '@fortawesome/free-solid-svg-icons'
-import { faFolder, faFolderOpen, faEdit, faListAlt, faTrashAlt } from '@fortawesome/free-regular-svg-icons'
+import { faHome, faBookOpen, faChalkboard, faThumbtack, faStickyNote, faCreditCardBlank, faPlusCircle } from '@fortawesome/pro-regular-svg-icons'
+import { faCog, faFont, faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import { faFolder, faFolderOpen, faEdit, faListAlt, faTrashAlt, faComments } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faFolder, faFolderOpen, faEdit, faListAlt, faCog, faFont, faTrashAlt)
+library.add(faFolder, faFolderOpen, faEdit, faListAlt, faCog, faFont, faTrashAlt, faComments, faHome, faBookOpen, faChalkboard, faThumbtack, faCaretDown, faStickyNote, faCreditCardBlank, faPlusCircle)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 // End Font Awesome Stuff

@@ -111,13 +111,13 @@
   opacity:0;
 }
 .open {
-  width:$side-bar-width;
+  width:500px;
   visibility: visible;
   opacity:1;
 }
 .project-view{
-  transition: min-width $delay ease 0s,width $delay ease 0s, opacity $delay ease $delay,visibility 0s ease 0s;
-  min-width:$side-bar-width;
+  // transition: min-width $delay ease 0s,width $delay ease 0s, opacity $delay ease $delay,visibility 0s ease 0s;
+  min-width:500px;
   height:100%;
   background-color:#f8f8f8;
   border-right:1px solid #cacaca;

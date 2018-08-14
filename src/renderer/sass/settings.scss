@@ -1,12 +1,26 @@
-// Colors
+// Palette
+$light-blue-lighter:rgb(137, 233, 255);
 $light-blue:rgb(4, 207, 255);
+$light-blue-darker:rgb(0, 97, 120);
+
+$dark-blue-lighter:rgb(148, 171, 255);
 $dark-blue:rgb(18, 69, 255);
+$dark-blue-darker:rgb(0, 28, 131);
+
+$yellow-lighter:rgb(255, 218, 133);
 $yellow:rgb(255, 177, 0);
+$yellow-darker:rgb(194, 135, 0);
+
+$orange-lighter:rgb(255, 194, 133);
 $orange:rgb(255, 127, 0);
+$orange-darker:rgb(194, 96, 0);
+
+$white:#f8f8f8;
 
 // Sizing
-$top-bar-height:40px;
-$side-bar-width:200px;
+$sidebar-open: 350px;
+$sidebar-closed: 70px;
+$window-bar-height: 22px;
 
 // Timing
-$delay: 0.2s;
+$msDelay: 300ms;

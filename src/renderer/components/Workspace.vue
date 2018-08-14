@@ -1,19 +1,19 @@
 <template>
   <div class="workspace">
     <project-view v-if="user.views.projects_view"></project-view>
-    <notes-view v-if="user.views.notes_view"></notes-view>
+    <!-- <notes-view v-if="user.views.notes_view"></notes-view> -->
     <boards-view v-if="user.views.boards_view"></boards-view>
   </div>
 </template>
 
 <script>
   import ProjectView from './ProjectView'
-  import NotesView from './NotesView'
+  // import NotesView from './NotesView'
   import BoardsView from './BoardsView'
   import { mapGetters } from 'vuex'
   export default {
     name: 'workspace',
-    components: { ProjectView, NotesView, BoardsView },
+    components: { ProjectView, BoardsView },
     methods: { },
     computed: mapGetters({
       user: 'user'
