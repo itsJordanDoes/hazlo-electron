@@ -1,20 +1,19 @@
 <template>
   <div id="app">
     <auth v-if="!auth"></auth>
-    <navigation :open="open" v-if="auth" v-on:update:open="open = $event"></navigation>
-    <h3 style="margin-left:100px;">{{ $route.path }}</h3>
+    <sidebar :open="open" v-if="auth" v-on:update:open="open = $event"></sidebar>
     <router-view v-if="auth" :class="[open?'router-view-open':'router-view-closed','router-view']"></router-view>
   </div>
 </template>
 
 <script>
-  import Navigation from './components/Navigation/Navigation'
+  import Sidebar from './components/Navigation/Sidebar'
   import Auth from './components/Auth/Auth'
   import { mapGetters } from 'vuex'
   import firebase from 'firebase'
   export default {
     name: 'Hazlo',
-    components: { Auth, Navigation },
+    components: { Auth, Sidebar },
     computed: mapGetters({
       user: 'user'
     }),
@@ -56,21 +55,22 @@
   /* CSS */
   #app {
     width:100%;
-    // height:calc(100% - #{$top-bar-height});
     height:100%;
-    .router-view {
-      display:flex;
-      flex-direction: row;
-      flex-wrap: none;
-      // margin-top:$window-bar-height;
-      transition: transform $msDelay ease-in-out;
-      width:calc(100% - #{$sidebar-closed});
-    }
-    .router-view-open {
-      transform:translate($sidebar-open, 0px);
-    }
-    .router-view-closed {
-      transform:translate($sidebar-closed, 0px);
-    }
+    background-color:$white;
+  }
+  .router-view {
+    transition: transform $msDelay ease-in-out;
+    position:absolute;
+    left:$padding;
+    top:0;
+    bottom:0;
+  }
+  .router-view-open {
+    transform:translate($sidebar-open, 0px);
+    right:-$sidebar-open;
+  }
+  .router-view-closed {
+    transform:translate($sidebar-closed, 0px);
+    right:$sidebar-closed;
   }
 </style>

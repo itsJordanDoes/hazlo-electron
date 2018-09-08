@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-    <div class="title">Boards</div>
+    <div class="title">Projects</div>
     <div class="cat-container">
       <div :class="['category',projectCategory === 'my' ? 'active' : '']" @click="selectCategory('my')">Owned</div>
       <div :class="['category',projectCategory === 'shared' ? 'active' : '']" @click="selectCategory('shared')">Shared</div>
       <div :class="['category',projectCategory === 'public' ? 'active' : '']" @click="selectCategory('public')">Public</div>
     </div>
     <router-link class="create" tag="div" to="create">
-      Create a Board
+      Create a Project
     </router-link>
     <ul class="side-bar-list">
         <router-link class="link" tag="li" v-for="project, i in projects" :to="'/c/' + $route.params.community_id + '/project/' + i">

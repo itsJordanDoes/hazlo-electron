@@ -1,4 +1,7 @@
 <template>
+  <div>
+    {{ $route.path }}
+  </div>
 </template>
 
 <script>
@@ -25,5 +28,5 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../../sass/settings.scss";
+@import "../sass/settings.scss";
 </style>

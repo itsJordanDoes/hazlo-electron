@@ -1,3 +1,18 @@
+// Fonts
+// @font-face {
+//     font-family: 'GothamRoundedBook';
+//     src: url(~@/assets/fonts/GothamRounded-Book.woff2) format('woff2');
+// }
+
+@mixin font-face($family,$src,$style: normal,$weight: normal) {
+	@font-face {
+		font-family: $family;
+		src: $src;
+		font-style: $style;
+		font-weight: $weight;
+	}
+}
+
 // Palette
 $light-blue-lighter:rgb(137, 233, 255);
 $light-blue:rgb(4, 207, 255);
@@ -16,11 +31,16 @@ $orange:rgb(255, 127, 0);
 $orange-darker:rgb(194, 96, 0);
 
 $white:#f8f8f8;
+$light-grey: #cacaca;
+$grey: #777;
+$black:#333;
 
 // Sizing
 $sidebar-open: 350px;
 $sidebar-closed: 70px;
 $window-bar-height: 22px;
+
+$padding:15px;
 
 // Timing
 $msDelay: 300ms;
